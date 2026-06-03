@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
+  <title>洗衣液比价 · 公斤/斤联动</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #e8f0f5;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 0.6rem 0.6rem;
+      margin: 0;
+      touch-action: manipulation;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: #f5f9fc;
+      border-radius: 1.5rem;
+      padding: 0.8rem 0.6rem 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      border: 1px solid #c8dae3;
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #2c4e6e;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .columns {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 1.2rem;
+      padding: 0.45rem 0.5rem 0.5rem;
+      border: 1px solid #c8dae3;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .wheel-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .wheel-row {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .wheel-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #4a6d8a;
+      min-width: 2.2rem;
+      text-align: right;
+    }
+
+    .price-wheels {
+      display: flex;
+      gap: 0.15rem;
+      flex: 1;
+      align-items: center;
+    }
+
+    .dual-selects {
+      display: flex;
+      gap: 0.2rem;
+      flex: 1;
+      align-items: center;
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      flex: 1;
+      height: 42px;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #f5f9fc;
+      border: 1px solid #b8cfdd;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .wheel-track {
+      position: absolute;
+      left: 0;
+      right: 0;
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+
+    .wheel-item {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #7a8f9e;
+      cursor: pointer;
+      transition: color 0.2s, font-size 0.2s;
+    }
+
+    .wheel-item.active {
+      color: #2c6e9a;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .wheel-highlight {
+      position: absolute;
+      top: 50%;
+      left: 3px;
+      right: 3px;
+      height: 42px;
+      transform: translateY(-50%);
+      border-top: 1px solid rgba(100, 150, 180, 0.3);
+      border-bottom: 1px solid rgba(100, 150, 180, 0.3);
+      background: rgba(100, 150, 180, 0.05);
+      pointer-events: none;
+      border-radius: 8px;
+    }
+
+    .wheel-separator {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #6b8a9e;
+    }
+
+    .select-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .select-wrapper select {
+      width: 100%;
+      height: 36px;
+      border-radius: 18px;
+      background: #f5f9fc;
+      border: 1px solid #b8cfdd;
+      padding: 0 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e3a52;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="%234a6d8a"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .unit-label {
+      font-size: 0.6rem;
+      color: #4a6d8a;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .results {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #edf3f8;
+      border-radius: 1.2rem;
+      padding: 0.35rem 0.5rem;
+      margin-top: 0.1rem;
+      gap: 0.2rem;
+    }
+
+    .result-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .result-label {
+      font-size: 0.55rem;
+      color: #5b7d94;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    .result-value {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #1e3a52;
+      line-height: 1.2;
+    }
+
+    .result-value small {
+      font-size: 0.55rem;
+      font-weight: 500;
+      color: #6b8a9e;
+    }
+
+    .price-highlight {
+      color: #2c6e9a;
+    }
+
+    .best-badge {
+      color: #e63946;
+      font-weight: 700;
+      font-size: 0.6rem;
+      text-align: center;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .reset-btn {
+      width: 100%;
+      margin-top: 0.6rem;
+      background: #d8e6f0;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      color: #2c4e6e;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #e0ecf5;
+      border: 1px solid #b8cfdd;
+    }
+
+    .reset-btn:active {
+      background: #c8dae8;
+    }
+
+    .unit-note {
+      text-align: center;
+      font-size: 0.55rem;
+      color: #8aa0b0;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>🧴 洗衣液划算对比</h2>
+  <div class="columns" id="productColumns"></div>
+  <button class="reset-btn" id="resetBtn">↺ 重置默认</button>
+  <div class="unit-note">1公斤 = 2市斤 · 公斤/市斤联动选择</div>
+</div>
+
+<script>
+  (function() {
+    // 市面上常见洗衣液规格（公斤）
+    const kgOptions = [0.5, 0.8, 1, 1.5, 1.8, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 7, 7.5, 8, 9, 10, 12, 15, 20];
+    // 对应的市斤选项
+    const jinOptions = kgOptions.map(kg => parseFloat((kg * 2).toFixed(1)));
+    
+    const digitOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    const defaultData = [
+      { total: 29.90, weightKg: 3 },
+      { total: 39.90, weightKg: 4 },
+      { total: 49.90, weightKg: 5 }
+    ];
+
+    let products = JSON.parse(JSON.stringify(defaultData));
+    let wheelInstances = [];
+    let isUpdating = false; // 防止联动时循环触发
+
+    const container = document.getElementById('productColumns');
+
+    function calc(total, weightKg) {
+      const t = parseFloat(total);
+      const w = parseFloat(weightKg);
+      if (isNaN(t) || isNaN(w) || t < 0 || w <= 0) {
+        return { perKg: null, perJin: null, valid: false };
+      }
+      const perKg = t / w;
+      const perJin = perKg / 2;
+      return { perKg, perJin, valid: true };
+    }
+
+    function format(val) {
+      return (val !== null && !isNaN(val)) ? val.toFixed(2) : '—';
+    }
+
+    function findBestIndex() {
+      let bestIdx = -1;
+      let lowest = Infinity;
+      products.forEach((p, i) => {
+        const res = calc(p.total, p.weightKg);
+        if (res.valid && res.perKg < lowest) {
+          lowest = res.perKg;
+          bestIdx = i;
+        }
+      });
+      return bestIdx;
+    }
+
+    function splitPrice(price) {
+      let val = parseFloat(price);
+      if (isNaN(val) || val < 0) val = 0;
+      val = Math.min(val, 99.99);
+      const str = val.toFixed(2);
+      const parts = str.split('.');
+      const intPart = parts[0].padStart(2, '0');
+      const decPart = parts[1] || '00';
+      return {
+        tens: parseInt(intPart[0], 10),
+        ones: parseInt(intPart[1], 10),
+        tenths: parseInt(decPart[0], 10),
+        hundredths: parseInt(decPart[1], 10)
+      };
+    }
+
+    function getPriceFromDigits(digits) {
+      return parseFloat(`${digits.tens}${digits.ones}.${digits.tenths}${digits.hundredths}`);
+    }
+
+    function updateAllResults() {
+      const bestIdx = findBestIndex();
+      document.querySelectorAll('.card').forEach((card, i) => {
+        const prod = products[i];
+        const res = calc(prod.total, prod.weightKg);
+        const perKg = format(res.perKg);
+        const perJin = format(res.perJin);
+        const isBest = (i === bestIdx && res.valid);
+        
+        const resultValues = card.querySelectorAll('.result-value');
+        if (resultValues.length >= 2) {
+          resultValues[0].innerHTML = `${perKg}<small>元</small>`;
+          resultValues[1].innerHTML = `${perJin}<small>元</small>`;
+        }
+        
+        const bestBadge = card.querySelector('.best-badge');
+        if (bestBadge) {
+          bestBadge.style.display = isBest ? 'block' : 'none';
+        }
+      });
+    }
+
+    class WheelScroller {
+      constructor(container, options, initialValue, onChange, isDigit = false) {
+        this.container = container;
+        this.options = options;
+        this.currentValue = initialValue;
+        this.onChange = onChange;
+        this.isDigit = isDigit;
+        this.itemHeight = 42;
+        this.currentIndex = options.indexOf(initialValue);
+        if (this.currentIndex === -1) this.currentIndex = 0;
+        
+        this.track = null;
+        this.isDragging = false;
+        this.startY = 0;
+        this.startScrollTop = 0;
+        
+        this.init();
+      }
+
+      init() {
+        this.container.innerHTML = '';
+        this.container.style.position = 'relative';
+        
+        const highlight = document.createElement('div');
+        highlight.className = 'wheel-highlight';
+        this.container.appendChild(highlight);
+        
+        this.track = document.createElement('div');
+        this.track.className = 'wheel-track';
+        this.container.appendChild(this.track);
+        
+        this.options.forEach((opt, i) => {
+          const item = document.createElement('div');
+          item.className = 'wheel-item';
+          if (this.isDigit) {
+            item.textContent = opt;
+          } else if (Number.isInteger(opt)) {
+            item.textContent = opt;
+          } else {
+            item.textContent = opt % 1 === 0 ? opt.toString() : opt.toFixed(1);
+          }
+          item.dataset.value = opt;
+          item.dataset.index = i;
+          this.track.appendChild(item);
+        });
+        
+        this.setPosition(this.currentIndex, false);
+        
+        this.container.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
+        this.container.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false });
+        this.container.addEventListener('touchend', this.onTouchEnd.bind(this));
+        
+        this.container.addEventListener('mousedown', this.onMouseDown.bind(this));
+        
+        this.container.addEventListener('wheel', this.onWheel.bind(this), { passive: false });
+        
+        this.track.addEventListener('click', (e) => {
+          const item = e.target.closest('.wheel-item');
+          if (item) {
+            const index = parseInt(item.dataset.index);
+            this.selectIndex(index);
+          }
+        });
+      }
+
+      onWheel(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const delta = e.deltaY > 0 ? 1 : -1;
+        let newIndex = this.currentIndex + delta;
+        newIndex = Math.max(0, Math.min(this.options.length - 1, newIndex));
+        
+        if (newIndex !== this.currentIndex) {
+          this.selectIndex(newIndex);
+        }
+      }
+
+      onTouchStart(e) {
+        e.preventDefault();
+        this.isDragging = true;
+        this.startY = e.touches[0].clientY;
+        this.startScrollTop = this.currentIndex * this.itemHeight;
+        this.track.style.transition = 'none';
+      }
+
+      onTouchMove(e) {
+        if (!this.isDragging) return;
+        e.preventDefault();
+        const deltaY = this.startY - e.touches[0].clientY;
+        const newScrollTop = this.startScrollTop + deltaY;
+        const maxScroll = (this.options.length - 1) * this.itemHeight;
+        const clampedScroll = Math.max(0, Math.min(maxScroll, newScrollTop));
+        this.track.style.transform = `translateY(${-clampedScroll}px)`;
+        
+        const currentIndex = Math.round(clampedScroll / this.itemHeight);
+        this.currentIndex = Math.max(0, Math.min(this.options.length - 1, currentIndex));
+        this.updateActiveClass();
+      }
+
+      onTouchEnd(e) {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+        this.snapToNearest();
+      }
+
+      onMouseDown(e) {
+        e.preventDefault();
+        this.isDragging = true;
+        this.startY = e.clientY;
+        this.startScrollTop = this.currentIndex * this.itemHeight;
+        this.track.style.transition = 'none';
+        
+        const onMouseMove = (e) => {
+          if (!this.isDragging) return;
+          e.preventDefault();
+          const deltaY = this.startY - e.clientY;
+          const newScrollTop = this.startScrollTop + deltaY;
+          const maxScroll = (this.options.length - 1) * this.itemHeight;
+          const clampedScroll = Math.max(0, Math.min(maxScroll, newScrollTop));
+          this.track.style.transform = `translateY(${-clampedScroll}px)`;
+          
+          const currentIndex = Math.round(clampedScroll / this.itemHeight);
+          this.currentIndex = Math.max(0, Math.min(this.options.length - 1, currentIndex));
+          this.updateActiveClass();
+        };
+        
+        const onMouseUp = () => {
+          this.isDragging = false;
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+          this.snapToNearest();
+        };
+        
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      }
+
+      snapToNearest() {
+        this.currentIndex = Math.max(0, Math.min(this.options.length - 1, this.currentIndex));
+        this.setPosition(this.currentIndex, true);
+        
+        const newValue = this.options[this.currentIndex];
+        if (newValue !== this.currentValue) {
+          this.currentValue = newValue;
+          if (this.onChange) this.onChange(newValue);
+        }
+      }
+
+      selectIndex(index) {
+        this.currentIndex = index;
+        this.setPosition(index, true);
+        const newValue = this.options[index];
+        if (newValue !== this.currentValue) {
+          this.currentValue = newValue;
+          if (this.onChange) this.onChange(newValue);
+        }
+      }
+
+      setPosition(index, animate = true) {
+        this.currentIndex = index;
+        this.track.style.transition = animate ? 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
+        this.track.style.transform = `translateY(${-index * this.itemHeight}px)`;
+        this.updateActiveClass();
+      }
+
+      updateActiveClass() {
+        const items = this.track.querySelectorAll('.wheel-item');
+        items.forEach((item, i) => {
+          if (i === this.currentIndex) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+      }
+
+      setValue(value) {
+        const index = this.options.indexOf(value);
+        if (index !== -1) {
+          this.currentValue = value;
+          this.setPosition(index, false);
+        }
+      }
+
+      destroy() {
+        this.container.innerHTML = '';
+      }
+    }
+
+    function renderSelectOptions(options, selectedValue) {
+      return options.map(opt => {
+        const display = opt % 1 === 0 ? opt.toString() : opt.toFixed(1);
+        const selected = (parseFloat(selectedValue) === opt) ? 'selected' : '';
+        return `<option value="${opt}" ${selected}>${display}</option>`;
+      }).join('');
+    }
+
+    function render() {
+      wheelInstances.forEach(w => w.destroy?.());
+      wheelInstances = [];
+      isUpdating = false;
+      
+      const bestIdx = findBestIndex();
+      let html = '';
+      
+      products.forEach((prod, idx) => {
+        const res = calc(prod.total, prod.weightKg);
+        const perKg = format(res.perKg);
+        const perJin = format(res.perJin);
+        const isBest = (idx === bestIdx && res.valid);
+        
+        html += `
+          <div class="card" data-index="${idx}">
+            <div class="wheel-group">
+              <div class="wheel-row">
+                <span class="wheel-label">💰总价</span>
+                <div class="price-wheels">
+                  <div class="wheel-wrapper" id="wheel-tens-${idx}"></div>
+                  <div class="wheel-wrapper" id="wheel-ones-${idx}"></div>
+                  <span class="wheel-separator">.</span>
+                  <div class="wheel-wrapper" id="wheel-tenths-${idx}"></div>
+                  <div class="wheel-wrapper" id="wheel-hundredths-${idx}"></div>
+                </div>
+              </div>
+              <div class="wheel-row">
+                <span class="wheel-label">⚖️规格</span>
+                <div class="dual-selects">
+                  <div class="select-wrapper">
+                    <select id="select-kg-${idx}">
+                      ${renderSelectOptions(kgOptions, prod.weightKg)}
+                    </select>
+                  </div>
+                  <span class="unit-label">公斤</span>
+                  <div class="select-wrapper">
+                    <select id="select-jin-${idx}">
+                      ${renderSelectOptions(jinOptions, parseFloat((prod.weightKg * 2).toFixed(1)))}
+                    </select>
+                  </div>
+                  <span class="unit-label">市斤</span>
+                </div>
+              </div>
+            </div>
+            <div class="results">
+              <div class="result-item">
+                <span class="result-label">每公斤</span>
+                <span class="result-value">${perKg}<small>元</small></span>
+              </div>
+              <div class="best-badge" style="display: ${isBest ? 'block' : 'none'};">🏆<br>最划算</div>
+              <div class="result-item">
+                <span class="result-label">每市斤</span>
+                <span class="result-value price-highlight">${perJin}<small>元</small></span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+      
+      products.forEach((prod, idx) => {
+        const kgSelect = document.getElementById(`select-kg-${idx}`);
+        const jinSelect = document.getElementById(`select-jin-${idx}`);
+        
+        // 公斤下拉变化时，联动市斤
+        if (kgSelect) {
+          kgSelect.addEventListener('change', function() {
+            if (isUpdating) return;
+            isUpdating = true;
+            
+            const kgValue = parseFloat(this.value);
+            products[idx].weightKg = kgValue;
+            const jinValue = parseFloat((kgValue * 2).toFixed(1));
+            
+            if (jinSelect) {
+              jinSelect.value = jinValue;
+            }
+            
+            updateAllResults();
+            isUpdating = false;
+          });
+        }
+        
+        // 市斤下拉变化时，联动公斤
+        if (jinSelect) {
+          jinSelect.addEventListener('change', function() {
+            if (isUpdating) return;
+            isUpdating = true;
+            
+            const jinValue = parseFloat(this.value);
+            const kgValue = parseFloat((jinValue / 2).toFixed(1));
+            products[idx].weightKg = kgValue;
+            
+            if (kgSelect) {
+              kgSelect.value = kgValue;
+            }
+            
+            updateAllResults();
+            isUpdating = false;
+          });
+        }
+        
+        const priceDigits = splitPrice(prod.total);
+        
+        const createWheel = (containerId, options, initialValue, onChange, isDigit = false) => {
+          const wheelContainer = document.getElementById(containerId);
+          if (!wheelContainer) return;
+          const wheel = new WheelScroller(wheelContainer, options, initialValue, onChange, isDigit);
+          wheelInstances.push(wheel);
+          return wheel;
+        };
+        
+        createWheel(`wheel-tens-${idx}`, digitOptions, priceDigits.tens, (val) => {
+          const digits = splitPrice(products[idx].total);
+          digits.tens = val;
+          products[idx].total = getPriceFromDigits(digits);
+          updateAllResults();
+        }, true);
+        
+        createWheel(`wheel-ones-${idx}`, digitOptions, priceDigits.ones, (val) => {
+          const digits = splitPrice(products[idx].total);
+          digits.ones = val;
+          products[idx].total = getPriceFromDigits(digits);
+          updateAllResults();
+        }, true);
+        
+        createWheel(`wheel-tenths-${idx}`, digitOptions, priceDigits.tenths, (val) => {
+          const digits = splitPrice(products[idx].total);
+          digits.tenths = val;
+          products[idx].total = getPriceFromDigits(digits);
+          updateAllResults();
+        }, true);
+        
+        createWheel(`wheel-hundredths-${idx}`, digitOptions, priceDigits.hundredths, (val) => {
+          const digits = splitPrice(products[idx].total);
+          digits.hundredths = val;
+          products[idx].total = getPriceFromDigits(digits);
+          updateAllResults();
+        }, true);
+      });
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      products = JSON.parse(JSON.stringify(defaultData));
+      render();
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>
