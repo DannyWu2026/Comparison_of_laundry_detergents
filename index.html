@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
-  <title>洗衣液比价 · 公斤/斤联动</title>
+  <title>洗衣液比价</title>
   <style>
     * {
       margin: 0;
@@ -13,13 +13,13 @@
     }
 
     body {
-      background: #e8f0f5;
+      background: #f5f0e8;
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
-      padding: 0.6rem 0.6rem;
+      padding: 0.5rem 0.5rem;
       margin: 0;
       touch-action: manipulation;
     }
@@ -27,43 +27,43 @@
     .container {
       width: 100%;
       max-width: 420px;
-      background: #f5f9fc;
+      background: #fffcf5;
       border-radius: 1.5rem;
-      padding: 0.8rem 0.6rem 1rem;
+      padding: 0.7rem 0.5rem 0.8rem;
       box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-      border: 1px solid #c8dae3;
+      border: 1px solid #e7dcc8;
     }
 
     h2 {
       text-align: center;
       font-weight: 600;
-      font-size: 1rem;
-      color: #2c4e6e;
-      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      color: #4e3b28;
+      margin-bottom: 0.4rem;
       letter-spacing: 0.5px;
     }
 
     .columns {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     .card {
       background: #ffffff;
       border-radius: 1.2rem;
-      padding: 0.45rem 0.5rem 0.5rem;
-      border: 1px solid #c8dae3;
+      padding: 0.5rem 0.5rem 0.55rem;
+      border: 1px solid #e3d6c0;
       box-shadow: 0 3px 8px rgba(0,0,0,0.02);
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.35rem;
     }
 
     .wheel-group {
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.35rem;
     }
 
     .wheel-row {
@@ -73,9 +73,9 @@
     }
 
     .wheel-label {
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      color: #4a6d8a;
+      color: #5f4e39;
       min-width: 2.2rem;
       text-align: right;
     }
@@ -89,19 +89,18 @@
 
     .dual-selects {
       display: flex;
-      gap: 0.2rem;
+      gap: 0.25rem;
       flex: 1;
-      align-items: center;
     }
 
     .wheel-wrapper {
       position: relative;
       flex: 1;
-      height: 42px;
+      height: 50px;
       overflow: hidden;
-      border-radius: 18px;
-      background: #f5f9fc;
-      border: 1px solid #b8cfdd;
+      border-radius: 20px;
+      background: #fcfaf5;
+      border: 1px solid #dbcdb0;
       touch-action: none;
       user-select: none;
       -webkit-user-select: none;
@@ -116,21 +115,21 @@
     }
 
     .wheel-item {
-      height: 42px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 600;
-      color: #7a8f9e;
+      color: #8b7a63;
       cursor: pointer;
       transition: color 0.2s, font-size 0.2s;
     }
 
     .wheel-item.active {
-      color: #2c6e9a;
+      color: #b45f2a;
       font-weight: 700;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
     }
 
     .wheel-highlight {
@@ -138,19 +137,19 @@
       top: 50%;
       left: 3px;
       right: 3px;
-      height: 42px;
+      height: 50px;
       transform: translateY(-50%);
-      border-top: 1px solid rgba(100, 150, 180, 0.3);
-      border-bottom: 1px solid rgba(100, 150, 180, 0.3);
-      background: rgba(100, 150, 180, 0.05);
+      border-top: 1px solid rgba(179, 146, 100, 0.3);
+      border-bottom: 1px solid rgba(179, 146, 100, 0.3);
+      background: rgba(179, 146, 100, 0.02);
       pointer-events: none;
       border-radius: 8px;
     }
 
     .wheel-separator {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      color: #6b8a9e;
+      color: #8b7a63;
     }
 
     .select-wrapper {
@@ -160,18 +159,18 @@
 
     .select-wrapper select {
       width: 100%;
-      height: 36px;
-      border-radius: 18px;
-      background: #f5f9fc;
-      border: 1px solid #b8cfdd;
+      height: 38px;
+      border-radius: 19px;
+      background: #fcfaf5;
+      border: 1px solid #dbcdb0;
       padding: 0 0.6rem;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: #1e3a52;
+      color: #2e2419;
       outline: none;
       appearance: none;
       -webkit-appearance: none;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="%234a6d8a"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="%235f4e39"><path d="M7 10l5 5 5-5z"/></svg>');
       background-repeat: no-repeat;
       background-position: right 0.5rem center;
       background-size: 0.8rem;
@@ -179,19 +178,21 @@
     }
 
     .unit-label {
-      font-size: 0.6rem;
-      color: #4a6d8a;
+      font-size: 0.65rem;
+      color: #8b7a63;
+      margin: 0 0.05rem;
+      display: flex;
+      align-items: center;
       white-space: nowrap;
-      font-weight: 500;
     }
 
     .results {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #edf3f8;
+      background: #faf5eb;
       border-radius: 1.2rem;
-      padding: 0.35rem 0.5rem;
+      padding: 0.4rem 0.5rem;
       margin-top: 0.1rem;
       gap: 0.2rem;
     }
@@ -203,33 +204,33 @@
     }
 
     .result-label {
-      font-size: 0.55rem;
-      color: #5b7d94;
+      font-size: 0.6rem;
+      color: #7b6b56;
       text-transform: uppercase;
       letter-spacing: 0.2px;
     }
 
     .result-value {
       font-weight: 700;
-      font-size: 1rem;
-      color: #1e3a52;
+      font-size: 1.05rem;
+      color: #b45f2a;
       line-height: 1.2;
     }
 
     .result-value small {
-      font-size: 0.55rem;
+      font-size: 0.6rem;
       font-weight: 500;
-      color: #6b8a9e;
+      color: #8b7a63;
     }
 
     .price-highlight {
-      color: #2c6e9a;
+      color: #e63946;
     }
 
     .best-badge {
       color: #e63946;
       font-weight: 700;
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       text-align: center;
       line-height: 1.2;
       white-space: nowrap;
@@ -237,42 +238,42 @@
 
     .reset-btn {
       width: 100%;
-      margin-top: 0.6rem;
-      background: #d8e6f0;
+      margin-top: 0.5rem;
+      background: #ede3d2;
       border: none;
-      padding: 0.5rem;
+      padding: 0.45rem;
       border-radius: 2rem;
       font-weight: 600;
-      color: #2c4e6e;
+      color: #4b3a28;
       font-size: 0.8rem;
       cursor: pointer;
-      background: #e0ecf5;
-      border: 1px solid #b8cfdd;
+      background: #f0e5d3;
+      border: 1px solid #dacbad;
     }
 
     .reset-btn:active {
-      background: #c8dae8;
+      background: #e2cfb0;
     }
 
     .unit-note {
       text-align: center;
       font-size: 0.55rem;
-      color: #8aa0b0;
-      margin-top: 0.25rem;
+      color: #b7a58b;
+      margin-top: 0.2rem;
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <h2>🧴 洗衣液划算对比</h2>
+  <h2>🧴 洗衣液比价</h2>
   <div class="columns" id="productColumns"></div>
-  <button class="reset-btn" id="resetBtn">↺ 重置默认</button>
-  <div class="unit-note">1公斤 = 2市斤 · 公斤/市斤联动选择</div>
+  <button class="reset-btn" id="resetBtn">重置默认</button>
+  <div class="unit-note">DannyWu2026</div>
 </div>
 
 <script>
   (function() {
-    // 市面上常见洗衣液规格（公斤）
+    // 市面上常见洗衣液规格（公斤）——沿用洗衣液逻辑不做改动
     const kgOptions = [0.5, 0.8, 1, 1.5, 1.8, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 7, 7.5, 8, 9, 10, 12, 15, 20];
     // 对应的市斤选项
     const jinOptions = kgOptions.map(kg => parseFloat((kg * 2).toFixed(1)));
@@ -280,9 +281,9 @@
     const digitOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     const defaultData = [
-      { total: 29.90, weightKg: 3 },
-      { total: 39.90, weightKg: 4 },
-      { total: 49.90, weightKg: 5 }
+      { total: 25.00, weightKg: 3 },
+      { total: 35.00, weightKg: 4 },
+      { total: 45.00, weightKg: 5 }
     ];
 
     let products = JSON.parse(JSON.stringify(defaultData));
@@ -368,7 +369,7 @@
         this.currentValue = initialValue;
         this.onChange = onChange;
         this.isDigit = isDigit;
-        this.itemHeight = 42;
+        this.itemHeight = 50;
         this.currentIndex = options.indexOf(initialValue);
         if (this.currentIndex === -1) this.currentIndex = 0;
         
@@ -409,14 +410,18 @@
         
         this.setPosition(this.currentIndex, false);
         
+        // 触摸事件
         this.container.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
         this.container.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false });
         this.container.addEventListener('touchend', this.onTouchEnd.bind(this));
         
+        // 鼠标拖拽事件
         this.container.addEventListener('mousedown', this.onMouseDown.bind(this));
         
+        // 鼠标滚轮事件
         this.container.addEventListener('wheel', this.onWheel.bind(this), { passive: false });
         
+        // 点击选择
         this.track.addEventListener('click', (e) => {
           const item = e.target.closest('.wheel-item');
           if (item) {
@@ -560,6 +565,7 @@
     }
 
     function render() {
+      // 清理旧的滚轮实例
       wheelInstances.forEach(w => w.destroy?.());
       wheelInstances = [];
       isUpdating = false;
@@ -577,7 +583,7 @@
           <div class="card" data-index="${idx}">
             <div class="wheel-group">
               <div class="wheel-row">
-                <span class="wheel-label">💰总价</span>
+                <span class="wheel-label">总价</span>
                 <div class="price-wheels">
                   <div class="wheel-wrapper" id="wheel-tens-${idx}"></div>
                   <div class="wheel-wrapper" id="wheel-ones-${idx}"></div>
@@ -587,7 +593,7 @@
                 </div>
               </div>
               <div class="wheel-row">
-                <span class="wheel-label">⚖️规格</span>
+                <span class="wheel-label">规格</span>
                 <div class="dual-selects">
                   <div class="select-wrapper">
                     <select id="select-kg-${idx}">
@@ -609,7 +615,7 @@
                 <span class="result-label">每公斤</span>
                 <span class="result-value">${perKg}<small>元</small></span>
               </div>
-              <div class="best-badge" style="display: ${isBest ? 'block' : 'none'};">🏆<br>最划算</div>
+              <div class="best-badge" style="display: ${isBest ? 'block' : 'none'};font-size: 1rem;">最划算哟♥♥</div>
               <div class="result-item">
                 <span class="result-label">每市斤</span>
                 <span class="result-value price-highlight">${perJin}<small>元</small></span>
@@ -621,6 +627,7 @@
       
       container.innerHTML = html;
       
+      // 绑定下拉联动与滚轮
       products.forEach((prod, idx) => {
         const kgSelect = document.getElementById(`select-kg-${idx}`);
         const jinSelect = document.getElementById(`select-jin-${idx}`);
@@ -630,15 +637,12 @@
           kgSelect.addEventListener('change', function() {
             if (isUpdating) return;
             isUpdating = true;
-            
             const kgValue = parseFloat(this.value);
             products[idx].weightKg = kgValue;
             const jinValue = parseFloat((kgValue * 2).toFixed(1));
-            
             if (jinSelect) {
               jinSelect.value = jinValue;
             }
-            
             updateAllResults();
             isUpdating = false;
           });
@@ -649,15 +653,12 @@
           jinSelect.addEventListener('change', function() {
             if (isUpdating) return;
             isUpdating = true;
-            
             const jinValue = parseFloat(this.value);
             const kgValue = parseFloat((jinValue / 2).toFixed(1));
             products[idx].weightKg = kgValue;
-            
             if (kgSelect) {
               kgSelect.value = kgValue;
             }
-            
             updateAllResults();
             isUpdating = false;
           });
@@ -665,10 +666,10 @@
         
         const priceDigits = splitPrice(prod.total);
         
-        const createWheel = (containerId, options, initialValue, onChange, isDigit = false) => {
+        const createWheel = (containerId, optionsArr, initialValue, onChange, isDigit = false) => {
           const wheelContainer = document.getElementById(containerId);
           if (!wheelContainer) return;
-          const wheel = new WheelScroller(wheelContainer, options, initialValue, onChange, isDigit);
+          const wheel = new WheelScroller(wheelContainer, optionsArr, initialValue, onChange, isDigit);
           wheelInstances.push(wheel);
           return wheel;
         };
